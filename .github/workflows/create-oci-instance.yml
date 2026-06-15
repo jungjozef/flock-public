@@ -86,9 +86,10 @@ jobs:
               --availability-domain "$AD" \
               --compartment-id "${{ secrets.OCI_COMPARTMENT_OCID }}" \
               --shape "VM.Standard.A1.Flex" \
-              --shape-config '{"ocpus":2,"memoryInGBs":12}' \
+              --shape-config '{"ocpus":4,"memoryInGBs":24}' \
               --image-id "$IMAGE_OCID" \
-              --create-vnic-details "{\"subnetId\":\"${{ secrets.OCI_SUBNET_OCID }}\",\"assignPublicIp\":true}" \
+              --subnet-id "${{ secrets.OCI_SUBNET_OCID }}" \
+              --assign-public-ip true \
               --display-name "flock-prod" \
               --metadata "{\"ssh_authorized_keys\":\"$SSH_KEY\"}" \
               --boot-volume-size-in-gbs 50 \
