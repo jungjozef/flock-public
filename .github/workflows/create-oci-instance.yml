@@ -2,7 +2,7 @@ name: OCI A1 Instance Creator
 
 on:
   schedule:
-    - cron: '*/30 * * * *'  # every 30 min — ~1440 runs/month, fits free tier
+    - cron: '7,22,37,52 * * * *'
   workflow_dispatch:         # manual trigger anytime
 
 jobs:
