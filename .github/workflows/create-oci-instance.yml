@@ -1,0 +1,157 @@
+name: OCI A1 Instance Creator
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'  # every 30 min — ~1440 runs/month, fits free tier
+  workflow_dispatch:         # manual trigger anytime
+
+jobs:
+  create-instance:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: write  # needed to disable workflow on success
+
+    steps:
+      - name: Install OCI CLI
+        run: pip install oci-cli --quiet
+
+      - name: Configure OCI CLI
+        run: |
+          mkdir -p ~/.oci
+          cat > ~/.oci/config << 'OCICONF'
+          [DEFAULT]
+          user=${{ secrets.OCI_USER_OCID }}
+          fingerprint=${{ secrets.OCI_FINGERPRINT }}
+          tenancy=${{ secrets.OCI_TENANCY_OCID }}
+          region=${{ secrets.OCI_REGION }}
+          key_file=/home/runner/.oci/oci_api_key.pem
+          OCICONF
+          printf '%s' '${{ secrets.OCI_PRIVATE_KEY }}' > ~/.oci/oci_api_key.pem
+          chmod 600 ~/.oci/oci_api_key.pem
+
+      - name: Check instance already exists
+        id: check
+        run: |
+          COUNT=$(oci compute instance list \
+            --compartment-id "${{ secrets.OCI_COMPARTMENT_OCID }}" \
+            --lifecycle-state RUNNING \
+            --all \
+            --query "length(data[?shape=='VM.Standard.A1.Flex'])" \
+            --raw-output 2>/dev/null || echo "0")
+          echo "count=$COUNT"
+          echo "exists=$( [ "$COUNT" -gt "0" ] && echo true || echo false )" >> "$GITHUB_OUTPUT"
+
+      - name: Skip — instance already running
+        if: steps.check.outputs.exists == 'true'
+        run: |
+          echo "A1 instance already running. Nothing to do."
+          exit 0
+
+      - name: Fetch latest Ubuntu AArch64 image OCID
+        if: steps.check.outputs.exists == 'false'
+        id: get-image
+        run: |
+          IMAGE_ID=$(oci compute image list \
+            --compartment-id "${{ secrets.OCI_COMPARTMENT_OCID }}" \
+            --operating-system "Canonical Ubuntu" \
+            --shape "VM.Standard.A1.Flex" \
+            --query "data[0].id" --raw-output)
+          echo "IMAGE_OCID=$IMAGE_ID" >> "$GITHUB_ENV"
+          echo "Using image: $IMAGE_ID"
+
+      - name: Get availability domains
+        if: steps.check.outputs.exists == 'false'
+        id: ads
+        run: |
+          ADS=$(oci iam availability-domain list \
+            --compartment-id "${{ secrets.OCI_TENANCY_OCID }}" \
+            --query 'data[].name' \
+            --output json | jq -r '.[]' | tr '\n' ' ')
+          echo "ads=$ADS" >> "$GITHUB_OUTPUT"
+          echo "Availability domains: $ADS"
+
+      - name: Try to create A1 instance (all ADs)
+        if: steps.check.outputs.exists == 'false'
+        id: create
+        env:
+          SSH_KEY: ${{ secrets.OCI_SSH_PUBLIC_KEY }}
+        run: |
+          CREATED=false
+
+          for AD in ${{ steps.ads.outputs.ads }}; do
+            echo "--- Trying AD: $AD ---"
+
+            RESULT=$(oci compute instance launch \
+              --availability-domain "$AD" \
+              --compartment-id "${{ secrets.OCI_COMPARTMENT_OCID }}" \
+              --shape "VM.Standard.A1.Flex" \
+              --shape-config '{"ocpus":4,"memoryInGBs":24}' \
+              --image-id "$IMAGE_OCID" \
+              --create-vnic-details "{\"subnetId\":\"${{ secrets.OCI_SUBNET_OCID }}\",\"assignPublicIp\":true}" \
+              --display-name "flock-prod" \
+              --metadata "{\"ssh_authorized_keys\":\"$SSH_KEY\"}" \
+              --boot-volume-size-in-gbs 50 \
+              2>&1) || true
+
+            if echo "$RESULT" | grep -q '"lifecycle-state"'; then
+              PUBLIC_IP=$(echo "$RESULT" | jq -r '.data["primary-private-ip-address"] // "pending"' 2>/dev/null || echo "check console")
+              echo "created=true" >> "$GITHUB_OUTPUT"
+              echo "ad=$AD" >> "$GITHUB_OUTPUT"
+              echo "ip=$PUBLIC_IP" >> "$GITHUB_OUTPUT"
+              CREATED=true
+              echo "SUCCESS in $AD"
+              break
+            elif echo "$RESULT" | grep -qi "out of host capacity\|InternalError\|LimitExceeded"; then
+              echo "Capacity unavailable in $AD, trying next..."
+            else
+              echo "Unexpected response from $AD:"
+              echo "$RESULT" | head -20
+            fi
+          done
+
+          if [ "$CREATED" = "false" ]; then
+            echo "created=false" >> "$GITHUB_OUTPUT"
+            echo "All ADs exhausted. Will retry next run."
+          fi
+
+      - name: Disable scheduled workflow on success
+        if: steps.create.outputs.created == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api \
+            "repos/$GITHUB_REPOSITORY/actions/workflows/create-oci-instance.yml" \
+            -X PATCH \
+            -f state=disabled \
+            && echo "Workflow schedule disabled."
+
+      - name: Create success issue
+        if: steps.create.outputs.created == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue create \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "OCI A1 instance created" \
+            --body "$(cat << EOF
+          ## Instance ready
+
+          **Shape:** VM.Standard.A1.Flex (4 OCPU / 24 GB RAM)
+          **Availability Domain:** ${{ steps.create.outputs.ad }}
+          **IP:** ${{ steps.create.outputs.ip }} (check OCI console for public IP if pending)
+
+          Scheduled workflow has been disabled automatically.
+
+          ### Next steps
+          - Verify instance in OCI console
+          - SSH in and set up the flock binary + Caddy + systemd service
+          - Point letsflock.cc DNS to the public IP
+          EOF
+          )"
+
+      - name: Log failure (capacity unavailable)
+        if: steps.create.outputs.created == 'false' && steps.check.outputs.exists == 'false'
+        run: |
+          echo "No capacity yet. Scheduled retry in 30 min."
+          exit 0
