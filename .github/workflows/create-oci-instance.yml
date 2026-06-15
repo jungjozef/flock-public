@@ -86,7 +86,7 @@ jobs:
               --availability-domain "$AD" \
               --compartment-id "${{ secrets.OCI_COMPARTMENT_OCID }}" \
               --shape "VM.Standard.A1.Flex" \
-              --shape-config '{"ocpus":4,"memoryInGBs":24}' \
+              --shape-config '{"ocpus":2,"memoryInGBs":12}' \
               --image-id "$IMAGE_OCID" \
               --create-vnic-details "{\"subnetId\":\"${{ secrets.OCI_SUBNET_OCID }}\",\"assignPublicIp\":true}" \
               --display-name "flock-prod" \
