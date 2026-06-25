@@ -1,354 +1,437 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" data-theme="light">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Flock — Everyone flies. Nobody plans.</title>
-  <meta name="description" content="Group flight coordination for friend groups. One link. Everyone adds their city. Vote. Book.">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Flock — Everyone flies. Nobody plans.</title>
+        <meta
+            name="description"
+            content="Group flight coordination for friend groups. One link. Everyone adds their city. Vote. Book."
+        />
 
-  <meta property="og:title" content="Flock — Everyone flies. Nobody plans.">
-  <meta property="og:description" content="Group flight coordination for friend groups. One link. Everyone adds their city. Vote. Book.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://letsflock.cc">
+        <meta
+            property="og:title"
+            content="Flock — Everyone flies. Nobody plans."
+        />
+        <meta
+            property="og:description"
+            content="Group flight coordination for friend groups. One link. Everyone adds their city. Vote. Book."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://letsflock.cc" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Karla:wght@400;500&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Karla:wght@400;500&display=swap"
+            rel="stylesheet"
+        />
 
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+        />
 
-  <style>
-    :root {
-      --coral:    #FF385C;
-      --coral-dk: #D90B2F;
-      --ink:      #222222;
-      --white:    #FFFFFF;
-      --sand:     #F7F3EE;
-      --edge:     #EDE8E0;
-      --smoke:    #717171;
-      --fog:      #B0A99F;
-      --b-bg:     #191919;
-      --b-head:   #121212;
+        <script
+            nowprocket
+            data-noptimize="1"
+            data-cfasync="false"
+            data-wpfc-render="false"
+            seraph-accel-crit="1"
+            data-no-defer="1"
+        >
+            (function () {
+                var script = document.createElement("script");
+                script.async = 1;
+                script.src = "https://emrldtp.com/NTQyOTQz.js?t=542943";
+                document.head.appendChild(script);
+            })();
+        </script>
 
-      --pico-primary:               var(--coral);
-      --pico-primary-hover:         var(--coral-dk);
-      --pico-background-color:      var(--white);
-      --pico-color:                 var(--ink);
-      --pico-font-family:           'Karla', sans-serif;
-      --pico-border-radius:         0.5rem;
-    }
+        <style>
+            :root {
+                --coral: #ff385c;
+                --coral-dk: #d90b2f;
+                --ink: #222222;
+                --white: #ffffff;
+                --sand: #f7f3ee;
+                --edge: #ede8e0;
+                --smoke: #717171;
+                --fog: #b0a99f;
+                --b-bg: #191919;
+                --b-head: #121212;
 
-    *, *::before, *::after { box-sizing: border-box; }
+                --pico-primary: var(--coral);
+                --pico-primary-hover: var(--coral-dk);
+                --pico-background-color: var(--white);
+                --pico-color: var(--ink);
+                --pico-font-family: "Karla", sans-serif;
+                --pico-border-radius: 0.5rem;
+            }
 
-    body {
-      font-family: 'Karla', sans-serif;
-      background: var(--white);
-      color: var(--ink);
-      margin: 0;
-      -webkit-font-smoothing: antialiased;
-    }
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+            }
 
-    /* ── NAV ── */
-    .nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1.5rem 2rem;
-      max-width: 1160px;
-      margin: 0 auto;
-    }
+            body {
+                font-family: "Karla", sans-serif;
+                background: var(--white);
+                color: var(--ink);
+                margin: 0;
+                -webkit-font-smoothing: antialiased;
+            }
 
-    a.logo {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.75rem;
-      font-weight: 600;
-      color: var(--ink);
-      text-decoration: none;
-      letter-spacing: -0.025em;
-    }
+            /* ── NAV ── */
+            .nav {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 1.5rem 2rem;
+                max-width: 1160px;
+                margin: 0 auto;
+            }
 
-    a.logo:hover { color: var(--ink); }
+            a.logo {
+                font-family: "Cormorant Garamond", serif;
+                font-size: 1.75rem;
+                font-weight: 600;
+                color: var(--ink);
+                text-decoration: none;
+                letter-spacing: -0.025em;
+            }
 
-    .nav-badge {
-      font-family: 'Karla', sans-serif;
-      font-size: 0.75rem;
-      color: var(--fog);
-      letter-spacing: 0.05em;
-    }
+            a.logo:hover {
+                color: var(--ink);
+            }
 
-    /* ── HERO ── */
-    .hero {
-      max-width: 1160px;
-      margin: 0 auto;
-      padding: 3.75rem 2rem 5.5rem;
-    }
+            .nav-badge {
+                font-family: "Karla", sans-serif;
+                font-size: 0.75rem;
+                color: var(--fog);
+                letter-spacing: 0.05em;
+            }
 
-    h1 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(4rem, 9.5vw, 7.25rem);
-      font-weight: 400;
-      line-height: 0.91;
-      letter-spacing: -0.04em;
-      color: var(--ink);
-      margin: 0 0 2.75rem;
-    }
+            /* ── HERO ── */
+            .hero {
+                max-width: 1160px;
+                margin: 0 auto;
+                padding: 3.75rem 2rem 5.5rem;
+            }
 
-    h1 em {
-      font-style: italic;
-      color: var(--coral);
-      display: block;
-    }
+            h1 {
+                font-family: "Cormorant Garamond", serif;
+                font-size: clamp(4rem, 9.5vw, 7.25rem);
+                font-weight: 400;
+                line-height: 0.91;
+                letter-spacing: -0.04em;
+                color: var(--ink);
+                margin: 0 0 2.75rem;
+            }
 
-    /* ── DEPARTURE BOARD ── */
-    .board {
-      background: var(--b-bg);
-      border-radius: 0.75rem;
-      overflow: hidden;
-      box-shadow: 0 32px 80px rgba(0,0,0,0.24), 0 2px 8px rgba(0,0,0,0.12);
-      margin-bottom: 2.75rem;
-    }
+            h1 em {
+                font-style: italic;
+                color: var(--coral);
+                display: block;
+            }
 
-    .board-top {
-      background: var(--b-head);
-      padding: 0.75rem 2.25rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+            /* ── DEPARTURE BOARD ── */
+            .board {
+                background: var(--b-bg);
+                border-radius: 0.75rem;
+                overflow: hidden;
+                box-shadow:
+                    0 32px 80px rgba(0, 0, 0, 0.24),
+                    0 2px 8px rgba(0, 0, 0, 0.12);
+                margin-bottom: 2.75rem;
+            }
 
-    .b-label {
-      font-family: 'Courier New', monospace;
-      font-size: 0.6rem;
-      letter-spacing: 0.28em;
-      color: var(--fog);
-      text-transform: uppercase;
-    }
+            .board-top {
+                background: var(--b-head);
+                padding: 0.75rem 2.25rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
 
-    .b-date {
-      font-family: 'Courier New', monospace;
-      font-size: 0.6rem;
-      letter-spacing: 0.12em;
-      color: var(--smoke);
-    }
+            .b-label {
+                font-family: "Courier New", monospace;
+                font-size: 0.6rem;
+                letter-spacing: 0.28em;
+                color: var(--fog);
+                text-transform: uppercase;
+            }
 
-    .sr-only {
-      position: absolute; width: 1px; height: 1px;
-      padding: 0; margin: -1px; overflow: hidden;
-      clip: rect(0,0,0,0); white-space: nowrap; border: 0;
-    }
+            .b-date {
+                font-family: "Courier New", monospace;
+                font-size: 0.6rem;
+                letter-spacing: 0.12em;
+                color: var(--smoke);
+            }
 
-    .board-routes { padding: 2rem 2.25rem 0; }
+            .sr-only {
+                position: absolute;
+                width: 1px;
+                height: 1px;
+                padding: 0;
+                margin: -1px;
+                overflow: hidden;
+                clip: rect(0, 0, 0, 0);
+                white-space: nowrap;
+                border: 0;
+            }
 
-    .diagram { width: 100%; display: block; }
+            .board-routes {
+                padding: 2rem 2.25rem 0;
+            }
 
-    .board-foot {
-      margin: 0 2.25rem;
-      padding: 1.25rem 0 1.5rem;
-      margin-top: 2rem;
-      border-top: 1px solid rgba(255,255,255,0.06);
-      font-family: 'Karla', sans-serif;
-      font-size: 0.78rem;
-      color: var(--smoke);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
+            .diagram {
+                width: 100%;
+                display: block;
+            }
 
-    .f-val {
-      font-family: 'Courier New', monospace;
-      font-size: 0.78rem;
-      color: var(--coral);
-    }
+            .board-foot {
+                margin: 0 2.25rem;
+                padding: 1.25rem 0 1.5rem;
+                margin-top: 2rem;
+                border-top: 1px solid rgba(255, 255, 255, 0.06);
+                font-family: "Karla", sans-serif;
+                font-size: 0.78rem;
+                color: var(--smoke);
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                flex-wrap: wrap;
+            }
 
-    .f-sep { color: rgba(255,255,255,0.1); }
+            .f-val {
+                font-family: "Courier New", monospace;
+                font-size: 0.78rem;
+                color: var(--coral);
+            }
 
-    /* ── PROBLEM STATEMENT ── */
-    .hero-problem {
-      font-family: 'Karla', sans-serif;
-      font-size: 1.05rem;
-      color: var(--smoke);
-      line-height: 1.7;
-      max-width: 100%;
-      margin: 0 0 2.75rem;
-    }
+            .f-sep {
+                color: rgba(255, 255, 255, 0.1);
+            }
 
-    /* ── BELOW BOARD ── */
-    .hero-sub {
-      font-size: 1rem;
-      color: var(--smoke);
-      margin: 0 0 1.5rem;
-      font-family: 'Karla', sans-serif;
-    }
+            /* ── PROBLEM STATEMENT ── */
+            .hero-problem {
+                font-family: "Karla", sans-serif;
+                font-size: 1.05rem;
+                color: var(--smoke);
+                line-height: 1.7;
+                max-width: 100%;
+                margin: 0 0 2.75rem;
+            }
 
-    /* ── WAITLIST FORM ── */
-    .waitlist {
-      display: flex;
-      gap: 0.75rem;
-      align-items: stretch;
-      flex-wrap: wrap;
-      margin-bottom: 1rem;
-    }
+            /* ── BELOW BOARD ── */
+            .hero-sub {
+                font-size: 1rem;
+                color: var(--smoke);
+                margin: 0 0 1.5rem;
+                font-family: "Karla", sans-serif;
+            }
 
-    .waitlist input[type="email"] {
-      font-family: 'Karla', sans-serif;
-      font-size: 1rem;
-      padding: 0.9rem 1.25rem;
-      border: 1.5px solid var(--edge);
-      border-radius: 0.5rem;
-      background: var(--white);
-      color: var(--ink);
-      outline: none;
-      flex: 1 1 220px;
-      min-width: 0;
-      transition: border-color 0.15s ease;
-    }
+            /* ── WAITLIST FORM ── */
+            .waitlist {
+                display: flex;
+                gap: 0.75rem;
+                align-items: stretch;
+                flex-wrap: wrap;
+                margin-bottom: 1rem;
+            }
 
-    .waitlist input[type="email"]:focus {
-      border-color: var(--coral);
-    }
+            .waitlist input[type="email"] {
+                font-family: "Karla", sans-serif;
+                font-size: 1rem;
+                padding: 0.9rem 1.25rem;
+                border: 1.5px solid var(--edge);
+                border-radius: 0.5rem;
+                background: var(--white);
+                color: var(--ink);
+                outline: none;
+                flex: 1 1 220px;
+                min-width: 0;
+                transition: border-color 0.15s ease;
+            }
 
-    .waitlist input[type="email"]::placeholder {
-      color: var(--fog);
-    }
+            .waitlist input[type="email"]:focus {
+                border-color: var(--coral);
+            }
 
-    button.cta {
-      display: inline-block;
-      background: var(--coral);
-      color: var(--white);
-      font-family: 'Karla', sans-serif;
-      font-size: 1rem;
-      font-weight: 500;
-      padding: 0.9rem 2.25rem;
-      border-radius: 0.5rem;
-      border: none;
-      cursor: pointer;
-      transition: background 0.15s ease;
-      white-space: nowrap;
-    }
+            .waitlist input[type="email"]::placeholder {
+                color: var(--fog);
+            }
 
-    button.cta:hover { background: var(--coral-dk); }
+            button.cta {
+                display: inline-block;
+                background: var(--coral);
+                color: var(--white);
+                font-family: "Karla", sans-serif;
+                font-size: 1rem;
+                font-weight: 500;
+                padding: 0.9rem 2.25rem;
+                border-radius: 0.5rem;
+                border: none;
+                cursor: pointer;
+                transition: background 0.15s ease;
+                white-space: nowrap;
+            }
 
-    .proof {
-      font-size: 0.8rem;
-      color: var(--fog);
-      font-family: 'Karla', sans-serif;
-      display: block;
-    }
+            button.cta:hover {
+                background: var(--coral-dk);
+            }
 
-    .form-success {
-      display: none;
-      font-size: 0.9rem;
-      color: var(--smoke);
-      font-family: 'Karla', sans-serif;
-      padding: 0.9rem 0;
-    }
+            .proof {
+                font-size: 0.8rem;
+                color: var(--fog);
+                font-family: "Karla", sans-serif;
+                display: block;
+            }
 
-    /* ── STEPS ── */
-    .steps {
-      background: var(--sand);
-      padding: 5rem 2rem 5.5rem;
-    }
+            .form-success {
+                display: none;
+                font-size: 0.9rem;
+                color: var(--smoke);
+                font-family: "Karla", sans-serif;
+                padding: 0.9rem 0;
+            }
 
-    .steps-inner {
-      max-width: 1160px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-    }
+            /* ── STEPS ── */
+            .steps {
+                background: var(--sand);
+                padding: 5rem 2rem 5.5rem;
+            }
 
-    .step { padding-right: 3rem; }
-    .step:last-child { padding-right: 0; }
+            .steps-inner {
+                max-width: 1160px;
+                margin: 0 auto;
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+            }
 
-    .step + .step {
-      padding-left: 3rem;
-      border-left: 1px solid var(--edge);
-    }
+            .step {
+                padding-right: 3rem;
+            }
+            .step:last-child {
+                padding-right: 0;
+            }
 
-    .step-tag {
-      font-family: 'Courier New', monospace;
-      font-size: 0.6rem;
-      letter-spacing: 0.2em;
-      color: var(--coral);
-      opacity: 0.55;
-      display: block;
-      margin-bottom: 0.75rem;
-    }
+            .step + .step {
+                padding-left: 3rem;
+                border-left: 1px solid var(--edge);
+            }
 
-    .step-title {
-      font-family: 'Karla', sans-serif;
-      font-weight: 500;
-      font-size: 0.975rem;
-      color: var(--ink);
-      margin: 0 0 0.375rem;
-    }
+            .step-tag {
+                font-family: "Courier New", monospace;
+                font-size: 0.6rem;
+                letter-spacing: 0.2em;
+                color: var(--coral);
+                opacity: 0.55;
+                display: block;
+                margin-bottom: 0.75rem;
+            }
 
-    .step-desc {
-      font-family: 'Karla', sans-serif;
-      font-size: 0.875rem;
-      color: var(--smoke);
-      line-height: 1.6;
-      margin: 0;
-    }
+            .step-title {
+                font-family: "Karla", sans-serif;
+                font-weight: 500;
+                font-size: 0.975rem;
+                color: var(--ink);
+                margin: 0 0 0.375rem;
+            }
 
-    /* ── FOOTER ── */
-    .site-footer {
-      padding: 2rem 2rem;
-      max-width: 1160px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
+            .step-desc {
+                font-family: "Karla", sans-serif;
+                font-size: 0.875rem;
+                color: var(--smoke);
+                line-height: 1.6;
+                margin: 0;
+            }
 
-    .site-footer span {
-      font-family: 'Karla', sans-serif;
-      font-size: 0.8rem;
-      color: var(--fog);
-    }
+            /* ── FOOTER ── */
+            .site-footer {
+                padding: 2rem 2rem;
+                max-width: 1160px;
+                margin: 0 auto;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
 
-    /* ── MOBILE ── */
-    @media (max-width: 720px) {
-      h1 { font-size: clamp(3.25rem, 12vw, 5rem); margin-bottom: 2rem; }
-      .board-foot { gap: 0.35rem; }
-      .steps-inner { grid-template-columns: 1fr; gap: 0; }
-      .step, .step + .step { padding: 0; border: none; }
-      .step + .step {
-        padding-top: 2.5rem;
-        margin-top: 2.5rem;
-        border-top: 1px solid var(--edge);
-      }
-      .waitlist { flex-direction: column; }
-      button.cta { width: 100%; text-align: center; }
-      .site-footer { justify-content: center; text-align: center; }
-    }
-  </style>
-</head>
-<body>
+            .site-footer span {
+                font-family: "Karla", sans-serif;
+                font-size: 0.8rem;
+                color: var(--fog);
+            }
 
-  <header>
-    <nav class="nav">
-      <a href="/" class="logo">Flock</a>
-      <span class="nav-badge">Coming soon</span>
-    </nav>
-  </header>
+            /* ── MOBILE ── */
+            @media (max-width: 720px) {
+                h1 {
+                    font-size: clamp(3.25rem, 12vw, 5rem);
+                    margin-bottom: 2rem;
+                }
+                .board-foot {
+                    gap: 0.35rem;
+                }
+                .steps-inner {
+                    grid-template-columns: 1fr;
+                    gap: 0;
+                }
+                .step,
+                .step + .step {
+                    padding: 0;
+                    border: none;
+                }
+                .step + .step {
+                    padding-top: 2.5rem;
+                    margin-top: 2.5rem;
+                    border-top: 1px solid var(--edge);
+                }
+                .waitlist {
+                    flex-direction: column;
+                }
+                button.cta {
+                    width: 100%;
+                    text-align: center;
+                }
+                .site-footer {
+                    justify-content: center;
+                    text-align: center;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <nav class="nav">
+                <a href="/" class="logo">Flock</a>
+                <span class="nav-badge">Coming soon</span>
+            </nav>
+        </header>
 
-  <main>
-    <section class="hero">
-      <h1>Everyone flies.<em>Nobody plans.</em></h1>
+        <main>
+            <section class="hero">
+                <h1>Everyone flies.<em>Nobody plans.</em></h1>
 
-      <p class="hero-problem">Your squad is in four cities. Someone proposes a weekend away. Now one person has to search every leg separately, post screenshots to the group, wait for five people to agree on dates and prices — and hope nobody drops out before anything's booked.</p>
+                <p class="hero-problem">
+                    Your squad is in four cities. Someone proposes a weekend
+                    away. Now one person has to search every leg separately,
+                    post screenshots to the group, wait for five people to agree
+                    on dates and prices — and hope nobody drops out before
+                    anything's booked.
+                </p>
 
-      <div class="board">
-        <div class="board-top">
-          <span class="b-label">Departures</span>
-          <span class="b-date">Fri 20 Jun</span>
-        </div>
+                <div class="board">
+                    <div class="board-top">
+                        <span class="b-label">Departures</span>
+                        <span class="b-date">Fri 20 Jun</span>
+                    </div>
 
-        <div class="board-routes">
-          <!--
+                    <div class="board-routes">
+                        <!--
             Render order (SVG paints back-to-front):
               1. Curved paths (strokes grow via dashoffset)
               2. Arrowhead polygons (travel via animateMotion, leading the stroke)
@@ -364,180 +447,414 @@
               rotate="auto" on animateMotion aligns tip to path tangent.
               visibility hidden until begin time to prevent flash at SVG origin.
           -->
-          <svg class="diagram" viewBox="0 0 1000 200"
-               aria-label="London, Lisbon, Amsterdam and Berlin all flying to BCN Barcelona">
+                        <svg
+                            class="diagram"
+                            viewBox="0 0 1000 200"
+                            aria-label="London, Lisbon, Amsterdam and Berlin all flying to BCN Barcelona"
+                        >
+                            <!-- 1. ROUTE PATHS — grow toward BCN -->
+                            <path
+                                id="p-lhr"
+                                d="M 178 52 C 285 28 372 70 445 93"
+                                fill="none"
+                                stroke="#FF385C"
+                                stroke-width="1.2"
+                                stroke-dasharray="800"
+                                stroke-dashoffset="800"
+                            >
+                                <animate
+                                    attributeName="stroke-dashoffset"
+                                    from="800"
+                                    to="0"
+                                    dur="1.1s"
+                                    begin="0.10s"
+                                    calcMode="spline"
+                                    keyTimes="0;1"
+                                    keySplines="0.4 0 0.2 1"
+                                    fill="freeze"
+                                />
+                            </path>
+                            <path
+                                id="p-lis"
+                                d="M 178 152 C 285 176 372 132 445 107"
+                                fill="none"
+                                stroke="#FF385C"
+                                stroke-width="1.2"
+                                stroke-dasharray="800"
+                                stroke-dashoffset="800"
+                            >
+                                <animate
+                                    attributeName="stroke-dashoffset"
+                                    from="800"
+                                    to="0"
+                                    dur="1.1s"
+                                    begin="0.38s"
+                                    calcMode="spline"
+                                    keyTimes="0;1"
+                                    keySplines="0.4 0 0.2 1"
+                                    fill="freeze"
+                                />
+                            </path>
+                            <path
+                                id="p-ams"
+                                d="M 822 44 C 715 20 628 70 555 93"
+                                fill="none"
+                                stroke="#FF385C"
+                                stroke-width="1.2"
+                                stroke-dasharray="800"
+                                stroke-dashoffset="800"
+                            >
+                                <animate
+                                    attributeName="stroke-dashoffset"
+                                    from="800"
+                                    to="0"
+                                    dur="1.1s"
+                                    begin="0.22s"
+                                    calcMode="spline"
+                                    keyTimes="0;1"
+                                    keySplines="0.4 0 0.2 1"
+                                    fill="freeze"
+                                />
+                            </path>
+                            <path
+                                id="p-txl"
+                                d="M 822 158 C 715 182 628 132 555 107"
+                                fill="none"
+                                stroke="#FF385C"
+                                stroke-width="1.2"
+                                stroke-dasharray="800"
+                                stroke-dashoffset="800"
+                            >
+                                <animate
+                                    attributeName="stroke-dashoffset"
+                                    from="800"
+                                    to="0"
+                                    dur="1.1s"
+                                    begin="0.52s"
+                                    calcMode="spline"
+                                    keyTimes="0;1"
+                                    keySplines="0.4 0 0.2 1"
+                                    fill="freeze"
+                                />
+                            </path>
 
-            <!-- 1. ROUTE PATHS — grow toward BCN -->
-            <path id="p-lhr" d="M 178 52 C 285 28 372 70 445 93"
-                  fill="none" stroke="#FF385C" stroke-width="1.2"
-                  stroke-dasharray="800" stroke-dashoffset="800">
-              <animate attributeName="stroke-dashoffset" from="800" to="0"
-                       dur="1.1s" begin="0.10s" calcMode="spline"
-                       keyTimes="0;1" keySplines="0.4 0 0.2 1" fill="freeze"/>
-            </path>
-            <path id="p-lis" d="M 178 152 C 285 176 372 132 445 107"
-                  fill="none" stroke="#FF385C" stroke-width="1.2"
-                  stroke-dasharray="800" stroke-dashoffset="800">
-              <animate attributeName="stroke-dashoffset" from="800" to="0"
-                       dur="1.1s" begin="0.38s" calcMode="spline"
-                       keyTimes="0;1" keySplines="0.4 0 0.2 1" fill="freeze"/>
-            </path>
-            <path id="p-ams" d="M 822 44 C 715 20 628 70 555 93"
-                  fill="none" stroke="#FF385C" stroke-width="1.2"
-                  stroke-dasharray="800" stroke-dashoffset="800">
-              <animate attributeName="stroke-dashoffset" from="800" to="0"
-                       dur="1.1s" begin="0.22s" calcMode="spline"
-                       keyTimes="0;1" keySplines="0.4 0 0.2 1" fill="freeze"/>
-            </path>
-            <path id="p-txl" d="M 822 158 C 715 182 628 132 555 107"
-                  fill="none" stroke="#FF385C" stroke-width="1.2"
-                  stroke-dasharray="800" stroke-dashoffset="800">
-              <animate attributeName="stroke-dashoffset" from="800" to="0"
-                       dur="1.1s" begin="0.52s" calcMode="spline"
-                       keyTimes="0;1" keySplines="0.4 0 0.2 1" fill="freeze"/>
-            </path>
+                            <!-- 2. ARROWHEADS — lead the growing stroke -->
+                            <polygon
+                                points="0,0 -13,-5 -13,5"
+                                fill="#FF385C"
+                                visibility="hidden"
+                            >
+                                <set
+                                    attributeName="visibility"
+                                    to="visible"
+                                    begin="0.10s"
+                                    fill="freeze"
+                                />
+                                <animateMotion
+                                    dur="1.1s"
+                                    begin="0.10s"
+                                    rotate="auto"
+                                    calcMode="spline"
+                                    keyTimes="0;1"
+                                    keySplines="0.4 0 0.2 1"
+                                    fill="freeze"
+                                >
+                                    <mpath href="#p-lhr" />
+                                </animateMotion>
+                            </polygon>
+                            <polygon
+                                points="0,0 -13,-5 -13,5"
+                                fill="#FF385C"
+                                visibility="hidden"
+                            >
+                                <set
+                                    attributeName="visibility"
+                                    to="visible"
+                                    begin="0.38s"
+                                    fill="freeze"
+                                />
+                                <animateMotion
+                                    dur="1.1s"
+                                    begin="0.38s"
+                                    rotate="auto"
+                                    calcMode="spline"
+                                    keyTimes="0;1"
+                                    keySplines="0.4 0 0.2 1"
+                                    fill="freeze"
+                                >
+                                    <mpath href="#p-lis" />
+                                </animateMotion>
+                            </polygon>
+                            <polygon
+                                points="0,0 -13,-5 -13,5"
+                                fill="#FF385C"
+                                visibility="hidden"
+                            >
+                                <set
+                                    attributeName="visibility"
+                                    to="visible"
+                                    begin="0.22s"
+                                    fill="freeze"
+                                />
+                                <animateMotion
+                                    dur="1.1s"
+                                    begin="0.22s"
+                                    rotate="auto"
+                                    calcMode="spline"
+                                    keyTimes="0;1"
+                                    keySplines="0.4 0 0.2 1"
+                                    fill="freeze"
+                                >
+                                    <mpath href="#p-ams" />
+                                </animateMotion>
+                            </polygon>
+                            <polygon
+                                points="0,0 -13,-5 -13,5"
+                                fill="#FF385C"
+                                visibility="hidden"
+                            >
+                                <set
+                                    attributeName="visibility"
+                                    to="visible"
+                                    begin="0.52s"
+                                    fill="freeze"
+                                />
+                                <animateMotion
+                                    dur="1.1s"
+                                    begin="0.52s"
+                                    rotate="auto"
+                                    calcMode="spline"
+                                    keyTimes="0;1"
+                                    keySplines="0.4 0 0.2 1"
+                                    fill="freeze"
+                                >
+                                    <mpath href="#p-txl" />
+                                </animateMotion>
+                            </polygon>
 
-            <!-- 2. ARROWHEADS — lead the growing stroke -->
-            <polygon points="0,0 -13,-5 -13,5" fill="#FF385C" visibility="hidden">
-              <set attributeName="visibility" to="visible" begin="0.10s" fill="freeze"/>
-              <animateMotion dur="1.1s" begin="0.10s" rotate="auto"
-                             calcMode="spline" keyTimes="0;1" keySplines="0.4 0 0.2 1"
-                             fill="freeze"><mpath href="#p-lhr"/></animateMotion>
-            </polygon>
-            <polygon points="0,0 -13,-5 -13,5" fill="#FF385C" visibility="hidden">
-              <set attributeName="visibility" to="visible" begin="0.38s" fill="freeze"/>
-              <animateMotion dur="1.1s" begin="0.38s" rotate="auto"
-                             calcMode="spline" keyTimes="0;1" keySplines="0.4 0 0.2 1"
-                             fill="freeze"><mpath href="#p-lis"/></animateMotion>
-            </polygon>
-            <polygon points="0,0 -13,-5 -13,5" fill="#FF385C" visibility="hidden">
-              <set attributeName="visibility" to="visible" begin="0.22s" fill="freeze"/>
-              <animateMotion dur="1.1s" begin="0.22s" rotate="auto"
-                             calcMode="spline" keyTimes="0;1" keySplines="0.4 0 0.2 1"
-                             fill="freeze"><mpath href="#p-ams"/></animateMotion>
-            </polygon>
-            <polygon points="0,0 -13,-5 -13,5" fill="#FF385C" visibility="hidden">
-              <set attributeName="visibility" to="visible" begin="0.52s" fill="freeze"/>
-              <animateMotion dur="1.1s" begin="0.52s" rotate="auto"
-                             calcMode="spline" keyTimes="0;1" keySplines="0.4 0 0.2 1"
-                             fill="freeze"><mpath href="#p-txl"/></animateMotion>
-            </polygon>
+                            <!-- 3. CITY LABELS — on top of path starts -->
+                            <text y="52" dominant-baseline="middle">
+                                <tspan
+                                    x="0"
+                                    font-family="'Courier New',monospace"
+                                    font-size="14"
+                                    font-weight="700"
+                                    fill="#FF385C"
+                                    letter-spacing="2"
+                                >
+                                    LHR
+                                </tspan>
+                                <tspan
+                                    dx="10"
+                                    font-family="Karla,sans-serif"
+                                    font-size="13"
+                                    fill="rgba(255,255,255,0.62)"
+                                >
+                                    London
+                                </tspan>
+                            </text>
+                            <text y="152" dominant-baseline="middle">
+                                <tspan
+                                    x="0"
+                                    font-family="'Courier New',monospace"
+                                    font-size="14"
+                                    font-weight="700"
+                                    fill="#FF385C"
+                                    letter-spacing="2"
+                                >
+                                    LIS
+                                </tspan>
+                                <tspan
+                                    dx="10"
+                                    font-family="Karla,sans-serif"
+                                    font-size="13"
+                                    fill="rgba(255,255,255,0.62)"
+                                >
+                                    Lisbon
+                                </tspan>
+                            </text>
+                            <text
+                                y="44"
+                                text-anchor="end"
+                                dominant-baseline="middle"
+                            >
+                                <tspan
+                                    x="950"
+                                    font-family="Karla,sans-serif"
+                                    font-size="13"
+                                    fill="rgba(255,255,255,0.62)"
+                                >
+                                    Amsterdam
+                                </tspan>
+                                <tspan
+                                    dx="10"
+                                    font-family="'Courier New',monospace"
+                                    font-size="14"
+                                    font-weight="700"
+                                    fill="#FF385C"
+                                    letter-spacing="2"
+                                >
+                                    AMS
+                                </tspan>
+                            </text>
+                            <text
+                                y="158"
+                                text-anchor="end"
+                                dominant-baseline="middle"
+                            >
+                                <tspan
+                                    x="962"
+                                    font-family="Karla,sans-serif"
+                                    font-size="13"
+                                    fill="rgba(255,255,255,0.62)"
+                                >
+                                    Berlin
+                                </tspan>
+                                <tspan
+                                    dx="10"
+                                    font-family="'Courier New',monospace"
+                                    font-size="14"
+                                    font-weight="700"
+                                    fill="#FF385C"
+                                    letter-spacing="2"
+                                >
+                                    TXL
+                                </tspan>
+                            </text>
 
-            <!-- 3. CITY LABELS — on top of path starts -->
-            <text y="52" dominant-baseline="middle">
-              <tspan x="0" font-family="'Courier New',monospace" font-size="14"
-                     font-weight="700" fill="#FF385C" letter-spacing="2">LHR</tspan>
-              <tspan dx="10" font-family="Karla,sans-serif" font-size="13"
-                     fill="rgba(255,255,255,0.62)">London</tspan>
-            </text>
-            <text y="152" dominant-baseline="middle">
-              <tspan x="0" font-family="'Courier New',monospace" font-size="14"
-                     font-weight="700" fill="#FF385C" letter-spacing="2">LIS</tspan>
-              <tspan dx="10" font-family="Karla,sans-serif" font-size="13"
-                     fill="rgba(255,255,255,0.62)">Lisbon</tspan>
-            </text>
-            <text y="44" text-anchor="end" dominant-baseline="middle">
-              <tspan x="950" font-family="Karla,sans-serif" font-size="13"
-                     fill="rgba(255,255,255,0.62)">Amsterdam</tspan>
-              <tspan dx="10" font-family="'Courier New',monospace" font-size="14"
-                     font-weight="700" fill="#FF385C" letter-spacing="2">AMS</tspan>
-            </text>
-            <text y="158" text-anchor="end" dominant-baseline="middle">
-              <tspan x="962" font-family="Karla,sans-serif" font-size="13"
-                     fill="rgba(255,255,255,0.62)">Berlin</tspan>
-              <tspan dx="10" font-family="'Courier New',monospace" font-size="14"
-                     font-weight="700" fill="#FF385C" letter-spacing="2">TXL</tspan>
-            </text>
+                            <!-- 4. BCN LABEL — topmost, arrowhead tips vanish into it -->
+                            <text
+                                x="500"
+                                y="100"
+                                text-anchor="middle"
+                                dominant-baseline="middle"
+                                font-family="'Courier New',monospace"
+                                font-size="54"
+                                font-weight="700"
+                                fill="#FF385C"
+                                letter-spacing="3"
+                            >
+                                BCN
+                            </text>
+                            <text
+                                x="500"
+                                y="128"
+                                text-anchor="middle"
+                                dominant-baseline="middle"
+                                font-family="Karla,sans-serif"
+                                font-size="11"
+                                fill="rgba(255,255,255,0.32)"
+                                letter-spacing="1"
+                            >
+                                Barcelona
+                            </text>
+                        </svg>
+                    </div>
 
-            <!-- 4. BCN LABEL — topmost, arrowhead tips vanish into it -->
-            <text x="500" y="100" text-anchor="middle" dominant-baseline="middle"
-                  font-family="'Courier New',monospace" font-size="54" font-weight="700"
-                  fill="#FF385C" letter-spacing="3">BCN</text>
-            <text x="500" y="128" text-anchor="middle" dominant-baseline="middle"
-                  font-family="Karla,sans-serif" font-size="11"
-                  fill="rgba(255,255,255,0.32)" letter-spacing="1">Barcelona</text>
-          </svg>
-        </div>
+                    <div class="board-foot">
+                        avg <span class="f-val">€312</span> per person
+                        <span class="f-sep">·</span> 4 cities
+                        <span class="f-sep">·</span> 20–22 Jun
+                    </div>
+                </div>
 
-        <div class="board-foot">
-          avg <span class="f-val">€312</span> per person
-          <span class="f-sep">·</span> 4 cities
-          <span class="f-sep">·</span> 20–22 Jun
-        </div>
-      </div>
+                <p class="hero-sub">
+                    Flock searches every leg at once. Your squad votes on dates
+                    and prices. Everyone books their own flight.
+                </p>
 
-      <p class="hero-sub">Flock searches every leg at once. Your squad votes on dates and prices. Everyone books their own flight.</p>
+                <form
+                    class="waitlist"
+                    id="waitlist-form"
+                    action="https://formspree.io/f/xgojazkv"
+                    method="POST"
+                >
+                    <label for="flock-email" class="sr-only"
+                        >Email address</label
+                    >
+                    <input
+                        id="flock-email"
+                        type="email"
+                        name="email"
+                        required
+                        placeholder="your@email.com"
+                        autocomplete="email"
+                    />
+                    <button type="submit" class="cta">
+                        Get early access &rarr;
+                    </button>
+                </form>
+                <div class="form-success" id="form-success">
+                    Got it. You'll hear from us when Flock is ready.
+                </div>
+                <span class="proof">No spam. One email when it launches.</span>
+            </section>
+        </main>
 
-      <form class="waitlist" id="waitlist-form"
-            action="https://formspree.io/f/xgojazkv"
-            method="POST">
-        <label for="flock-email" class="sr-only">Email address</label>
-        <input id="flock-email" type="email" name="email" required placeholder="your@email.com" autocomplete="email">
-        <button type="submit" class="cta">Get early access &rarr;</button>
-      </form>
-      <div class="form-success" id="form-success">Got it. You'll hear from us when Flock is ready.</div>
-      <span class="proof">No spam. One email when it launches.</span>
+        <section class="steps">
+            <div class="steps-inner">
+                <div class="step">
+                    <span class="step-tag">01</span>
+                    <p class="step-title">Pick destination + dates.</p>
+                    <p class="step-desc">
+                        You set the where and when. Share the link.
+                    </p>
+                </div>
 
-    </section>
-  </main>
+                <div class="step">
+                    <span class="step-tag">02</span>
+                    <p class="step-title">Squad adds their city.</p>
+                    <p class="step-desc">
+                        No account. Name and city. That's it.
+                    </p>
+                </div>
 
-  <section class="steps">
-    <div class="steps-inner">
+                <div class="step">
+                    <span class="step-tag">03</span>
+                    <p class="step-title">Vote. Book. Done.</p>
+                    <p class="step-desc">
+                        One tap. Deep-link to book your own leg.
+                    </p>
+                </div>
+            </div>
+        </section>
 
-      <div class="step">
-        <span class="step-tag">01</span>
-        <p class="step-title">Pick destination + dates.</p>
-        <p class="step-desc">You set the where and when. Share the link.</p>
-      </div>
+        <footer>
+            <div class="site-footer">
+                <span>letsflock.cc</span>
+                <span>Everyone flies. Nobody plans.</span>
+            </div>
+        </footer>
 
-      <div class="step">
-        <span class="step-tag">02</span>
-        <p class="step-title">Squad adds their city.</p>
-        <p class="step-desc">No account. Name and city. That's it.</p>
-      </div>
+        <script>
+            (function () {
+                const form = document.getElementById("waitlist-form");
+                const success = document.getElementById("form-success");
+                if (!form) return;
 
-      <div class="step">
-        <span class="step-tag">03</span>
-        <p class="step-title">Vote. Book. Done.</p>
-        <p class="step-desc">One tap. Deep-link to book your own leg.</p>
-      </div>
-
-    </div>
-  </section>
-
-  <footer>
-    <div class="site-footer">
-      <span>letsflock.cc</span>
-      <span>Everyone flies. Nobody plans.</span>
-    </div>
-  </footer>
-
-  <script>
-    (function () {
-      const form = document.getElementById('waitlist-form');
-      const success = document.getElementById('form-success');
-      if (!form) return;
-
-      form.addEventListener('submit', function (e) {
-        e.preventDefault();
-        const data = new FormData(form);
-        fetch(form.action, {
-          method: 'POST',
-          body: data,
-          headers: { 'Accept': 'application/json' }
-        }).then(function (r) {
-          if (r.ok) {
-            form.style.display = 'none';
-            success.style.display = 'block';
-          } else {
-            form.querySelector('button').textContent = 'Try again';
-          }
-        }).catch(function () {
-          form.querySelector('button').textContent = 'Try again';
-        });
-      });
-    })();
-  </script>
-
-</body>
+                form.addEventListener("submit", function (e) {
+                    e.preventDefault();
+                    const data = new FormData(form);
+                    fetch(form.action, {
+                        method: "POST",
+                        body: data,
+                        headers: { Accept: "application/json" },
+                    })
+                        .then(function (r) {
+                            if (r.ok) {
+                                form.style.display = "none";
+                                success.style.display = "block";
+                            } else {
+                                form.querySelector("button").textContent =
+                                    "Try again";
+                            }
+                        })
+                        .catch(function () {
+                            form.querySelector("button").textContent =
+                                "Try again";
+                        });
+                });
+            })();
+        </script>
+    </body>
 </html>
