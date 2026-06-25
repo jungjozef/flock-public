@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flock — Everyone flies. Nobody plans.</title>
+  <meta name="description" content="Group flight coordination for friend groups. One link. Everyone adds their city. Vote. Book.">
+
+  <meta property="og:title" content="Flock — Everyone flies. Nobody plans.">
+  <meta property="og:description" content="Group flight coordination for friend groups. One link. Everyone adds their city. Vote. Book.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://letsflock.cc">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Karla:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+
+  <style>
+    :root {
+      --coral:    #FF385C;
+      --coral-dk: #D90B2F;
+      --ink:      #222222;
+      --white:    #FFFFFF;
+      --sand:     #F7F3EE;
+      --edge:     #EDE8E0;
+      --smoke:    #717171;
+      --fog:      #B0A99F;
+      --b-bg:     #191919;
+      --b-head:   #121212;
+
+      --pico-primary:               var(--coral);
+      --pico-primary-hover:         var(--coral-dk);
+      --pico-background-color:      var(--white);
+      --pico-color:                 var(--ink);
+      --pico-font-family:           'Karla', sans-serif;
+      --pico-border-radius:         0.5rem;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      font-family: 'Karla', sans-serif;
+      background: var(--white);
+      color: var(--ink);
+      margin: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 2rem;
+      max-width: 1160px;
+      margin: 0 auto;
+    }
+
+    a.logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: var(--ink);
+      text-decoration: none;
+      letter-spacing: -0.025em;
+    }
+
+    a.logo:hover { color: var(--ink); }
+
+    .nav-badge {
+      font-family: 'Karla', sans-serif;
+      font-size: 0.75rem;
+      color: var(--fog);
+      letter-spacing: 0.05em;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 3.75rem 2rem 5.5rem;
+    }
+
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(4rem, 9.5vw, 7.25rem);
+      font-weight: 400;
+      line-height: 0.91;
+      letter-spacing: -0.04em;
+      color: var(--ink);
+      margin: 0 0 2.75rem;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--coral);
+      display: block;
+    }
+
+    /* ── DEPARTURE BOARD ── */
+    .board {
+      background: var(--b-bg);
+      border-radius: 0.75rem;
+      overflow: hidden;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.24), 0 2px 8px rgba(0,0,0,0.12);
+      margin-bottom: 2.75rem;
+    }
+
+    .board-top {
+      background: var(--b-head);
+      padding: 0.75rem 2.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .b-label {
+      font-family: 'Courier New', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.28em;
+      color: var(--fog);
+      text-transform: uppercase;
+    }
+
+    .b-date {
+      font-family: 'Courier New', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      color: var(--smoke);
+    }
+
+    .board-routes { padding: 2rem 2.25rem 0; }
+
+    .diagram { width: 100%; display: block; }
+
+    .rline {
+      stroke-dasharray: 450;
+      stroke-dashoffset: 450;
+      animation: trace 1.1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    @keyframes trace { to { stroke-dashoffset: 0; } }
+
+    @media (prefers-reduced-motion: reduce) {
+      .rline { animation: none; stroke-dashoffset: 0; }
+    }
+
+    .board-foot {
+      margin: 0 2.25rem;
+      padding: 1.25rem 0 1.5rem;
+      margin-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      font-family: 'Karla', sans-serif;
+      font-size: 0.78rem;
+      color: var(--smoke);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .f-val {
+      font-family: 'Courier New', monospace;
+      font-size: 0.78rem;
+      color: var(--coral);
+    }
+
+    .f-sep { color: rgba(255,255,255,0.1); }
+
+    /* ── PROBLEM STATEMENT ── */
+    .hero-problem {
+      font-family: 'Karla', sans-serif;
+      font-size: 1.05rem;
+      color: var(--smoke);
+      line-height: 1.7;
+      max-width: 100%;
+      margin: 0 0 2.75rem;
+    }
+
+    /* ── BELOW BOARD ── */
+    .hero-sub {
+      font-size: 1rem;
+      color: var(--smoke);
+      margin: 0 0 1.5rem;
+      font-family: 'Karla', sans-serif;
+    }
+
+    /* ── WAITLIST FORM ── */
+    .waitlist {
+      display: flex;
+      gap: 0.75rem;
+      align-items: stretch;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .waitlist input[type="email"] {
+      font-family: 'Karla', sans-serif;
+      font-size: 1rem;
+      padding: 0.9rem 1.25rem;
+      border: 1.5px solid var(--edge);
+      border-radius: 0.5rem;
+      background: var(--white);
+      color: var(--ink);
+      outline: none;
+      flex: 1 1 220px;
+      min-width: 0;
+      transition: border-color 0.15s ease;
+    }
+
+    .waitlist input[type="email"]:focus {
+      border-color: var(--coral);
+    }
+
+    .waitlist input[type="email"]::placeholder {
+      color: var(--fog);
+    }
+
+    button.cta {
+      display: inline-block;
+      background: var(--coral);
+      color: var(--white);
+      font-family: 'Karla', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      padding: 0.9rem 2.25rem;
+      border-radius: 0.5rem;
+      border: none;
+      cursor: pointer;
+      transition: background 0.15s ease;
+      white-space: nowrap;
+    }
+
+    button.cta:hover { background: var(--coral-dk); }
+
+    .proof {
+      font-size: 0.8rem;
+      color: var(--fog);
+      font-family: 'Karla', sans-serif;
+      display: block;
+    }
+
+    .form-success {
+      display: none;
+      font-size: 0.9rem;
+      color: var(--smoke);
+      font-family: 'Karla', sans-serif;
+      padding: 0.9rem 0;
+    }
+
+    /* ── STEPS ── */
+    .steps {
+      background: var(--sand);
+      padding: 5rem 2rem 5.5rem;
+    }
+
+    .steps-inner {
+      max-width: 1160px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .step { padding-right: 3rem; }
+    .step:last-child { padding-right: 0; }
+
+    .step + .step {
+      padding-left: 3rem;
+      border-left: 1px solid var(--edge);
+    }
+
+    .step-tag {
+      font-family: 'Courier New', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      color: var(--coral);
+      opacity: 0.55;
+      display: block;
+      margin-bottom: 0.75rem;
+    }
+
+    .step-title {
+      font-family: 'Karla', sans-serif;
+      font-weight: 500;
+      font-size: 0.975rem;
+      color: var(--ink);
+      margin: 0 0 0.375rem;
+    }
+
+    .step-desc {
+      font-family: 'Karla', sans-serif;
+      font-size: 0.875rem;
+      color: var(--smoke);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* ── FOOTER ── */
+    .site-footer {
+      padding: 2rem 2rem;
+      max-width: 1160px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .site-footer span {
+      font-family: 'Karla', sans-serif;
+      font-size: 0.8rem;
+      color: var(--fog);
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 720px) {
+      h1 { font-size: clamp(3.25rem, 12vw, 5rem); margin-bottom: 2rem; }
+      .board-foot { gap: 0.35rem; }
+      .steps-inner { grid-template-columns: 1fr; gap: 0; }
+      .step, .step + .step { padding: 0; border: none; }
+      .step + .step {
+        padding-top: 2.5rem;
+        margin-top: 2.5rem;
+        border-top: 1px solid var(--edge);
+      }
+      .waitlist { flex-direction: column; }
+      button.cta { width: 100%; text-align: center; }
+      .site-footer { justify-content: center; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav class="nav">
+      <a href="/" class="logo">Flock</a>
+      <span class="nav-badge">Coming soon</span>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>Everyone flies.<em>Nobody plans.</em></h1>
+
+      <p class="hero-problem">Your squad is in four cities. Someone proposes a weekend away. Now one person has to search every leg separately, post screenshots to the group, wait for five people to agree on dates and prices — and hope nobody drops out before anything's booked.</p>
+
+      <div class="board">
+        <div class="board-top">
+          <span class="b-label">Departures</span>
+          <span class="b-date">Fri 20 Jun</span>
+        </div>
+
+        <div class="board-routes">
+          <svg class="diagram" viewBox="0 0 1000 140"
+               aria-label="London and Lisbon on left, Amsterdam and Berlin on right, all flying to BCN Barcelona">
+            <defs>
+              <marker id="ah" markerWidth="10" markerHeight="10"
+                      refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse">
+                <polygon points="0,1 10,5 0,9" fill="#FF385C"/>
+              </marker>
+            </defs>
+
+            <!-- DESTINATION -->
+            <text x="500" y="63" text-anchor="middle" dominant-baseline="middle"
+                  font-family="'Courier New',monospace" font-size="54" font-weight="700"
+                  fill="#FF385C" letter-spacing="3">BCN</text>
+            <text x="500" y="88" text-anchor="middle" dominant-baseline="middle"
+                  font-family="Karla,sans-serif" font-size="11"
+                  fill="rgba(255,255,255,0.32)" letter-spacing="1">Barcelona</text>
+
+            <!-- LEFT LABELS -->
+            <text y="28" dominant-baseline="middle">
+              <tspan x="0" font-family="'Courier New',monospace" font-size="14"
+                     font-weight="700" fill="#FF385C" letter-spacing="2">LHR</tspan>
+              <tspan dx="10" font-family="Karla,sans-serif" font-size="13"
+                     fill="rgba(255,255,255,0.62)">London</tspan>
+            </text>
+            <text y="114" dominant-baseline="middle">
+              <tspan x="0" font-family="'Courier New',monospace" font-size="14"
+                     font-weight="700" fill="#FF385C" letter-spacing="2">LIS</tspan>
+              <tspan dx="10" font-family="Karla,sans-serif" font-size="13"
+                     fill="rgba(255,255,255,0.62)">Lisbon</tspan>
+            </text>
+
+            <!-- RIGHT LABELS -->
+            <text y="18" text-anchor="end" dominant-baseline="middle">
+              <tspan x="958" font-family="Karla,sans-serif" font-size="13"
+                     fill="rgba(255,255,255,0.62)">Amsterdam</tspan>
+              <tspan dx="10" font-family="'Courier New',monospace" font-size="14"
+                     font-weight="700" fill="#FF385C" letter-spacing="2">AMS</tspan>
+            </text>
+            <text y="124" text-anchor="end" dominant-baseline="middle">
+              <tspan x="970" font-family="Karla,sans-serif" font-size="13"
+                     fill="rgba(255,255,255,0.62)">Berlin</tspan>
+              <tspan dx="10" font-family="'Courier New',monospace" font-size="14"
+                     font-weight="700" fill="#FF385C" letter-spacing="2">TXL</tspan>
+            </text>
+
+            <!-- ROUTE LINES -->
+            <line class="rline" x1="115" y1="28" x2="443" y2="57"
+                  stroke="#FF385C" stroke-width="1.2" marker-end="url(#ah)"
+                  style="animation-delay:0.10s"/>
+            <line class="rline" x1="115" y1="114" x2="443" y2="70"
+                  stroke="#FF385C" stroke-width="1.2" marker-end="url(#ah)"
+                  style="animation-delay:0.38s"/>
+            <line class="rline" x1="883" y1="18" x2="557" y2="55"
+                  stroke="#FF385C" stroke-width="1.2" marker-end="url(#ah)"
+                  style="animation-delay:0.22s"/>
+            <line class="rline" x1="905" y1="124" x2="557" y2="72"
+                  stroke="#FF385C" stroke-width="1.2" marker-end="url(#ah)"
+                  style="animation-delay:0.52s"/>
+          </svg>
+        </div>
+
+        <div class="board-foot">
+          avg <span class="f-val">€312</span> per person
+          <span class="f-sep">·</span> 4 cities
+          <span class="f-sep">·</span> 20–22 Jun
+        </div>
+      </div>
+
+      <p class="hero-sub">Flock searches every leg at once. Your squad votes on dates and prices. Everyone books their own flight.</p>
+
+      <form class="waitlist" id="waitlist-form"
+            action="https://formspree.io/f/xgojazkv"
+            method="POST">
+        <input type="email" name="email" required placeholder="your@email.com" autocomplete="email">
+        <button type="submit" class="cta">Get early access &rarr;</button>
+      </form>
+      <div class="form-success" id="form-success">Got it. You'll hear from us when Flock is ready.</div>
+      <span class="proof">No spam. One email when it launches.</span>
+
+    </section>
+  </main>
+
+  <section class="steps">
+    <div class="steps-inner">
+
+      <div class="step">
+        <span class="step-tag">01</span>
+        <p class="step-title">Pick destination + dates.</p>
+        <p class="step-desc">You set the where and when. Share the link.</p>
+      </div>
+
+      <div class="step">
+        <span class="step-tag">02</span>
+        <p class="step-title">Squad adds their city.</p>
+        <p class="step-desc">No account. Name and city. That's it.</p>
+      </div>
+
+      <div class="step">
+        <span class="step-tag">03</span>
+        <p class="step-title">Vote. Book. Done.</p>
+        <p class="step-desc">One tap. Deep-link to book your own leg.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    <div class="site-footer">
+      <span>letsflock.cc</span>
+      <span>Everyone flies. Nobody plans.</span>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var form = document.getElementById('waitlist-form');
+      var success = document.getElementById('form-success');
+      if (!form) return;
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var data = new FormData(form);
+        fetch(form.action, {
+          method: 'POST',
+          body: data,
+          headers: { 'Accept': 'application/json' }
+        }).then(function (r) {
+          if (r.ok) {
+            form.style.display = 'none';
+            success.style.display = 'block';
+          } else {
+            form.querySelector('button').textContent = 'Try again';
+          }
+        }).catch(function () {
+          form.querySelector('button').textContent = 'Try again';
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>
